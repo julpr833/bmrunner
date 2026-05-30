@@ -1,0 +1,198 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: oklch(0.13 0.03 280);
+  --surface: oklch(0.18 0.04 280);
+  --text: oklch(0.85 0.035 270);
+  --muted: oklch(0.48 0.04 275);
+  --accent: oklch(0.72 0.12 255);
+  --border: oklch(0.3 0.045 275);
+  --radius: 0.5rem;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap");
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Fira Code", monospace;
+  font-size: 0.875rem;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.mng-container {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.mng-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.mng-add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mng-add-form input {
+  flex: 1;
+  padding: 0.5rem 0.625rem;
+  border: 0.0625rem solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.mng-add-form input:focus {
+  border-color: var(--accent);
+}
+
+.mng-add-form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: oklch(0.07 0.02 280);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.mng-add-form button:hover {
+  opacity: 0.85;
+}
+
+.mng-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mng-table th {
+  text-align: left;
+  padding: 0.5rem 0.625rem;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 0.0625rem solid var(--border);
+}
+
+.mng-table td {
+  padding: 0.5rem 0.625rem;
+  border-bottom: 0.0625rem solid var(--border);
+  vertical-align: middle;
+}
+
+.mng-table tr:hover td {
+  background: var(--surface);
+}
+
+.mng-name-cell {
+  font-weight: 600;
+  color: var(--accent);
+  width: 30%;
+}
+
+.mng-value-cell {
+  color: var(--muted);
+  word-break: break-all;
+  width: 50%;
+}
+
+.mng-actions {
+  display: flex;
+  gap: 0.375rem;
+  justify-content: flex-end;
+}
+
+.mng-actions button {
+  padding: 0.25rem 0.5rem;
+  border: 0.0625rem solid var(--border);
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.mng-actions button:hover {
+  background: var(--surface);
+}
+
+.mng-edit-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.mng-delete-btn:hover {
+  border-color: oklch(0.68 0.15 350);
+  color: oklch(0.68 0.15 350);
+}
+
+.mng-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.mng-page-btn {
+  padding: 0.25rem 0.5rem;
+  border: 0.0625rem solid var(--border);
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.mng-page-btn:hover:not(:disabled) {
+  background: var(--surface);
+}
+
+.mng-page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.mng-empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--muted);
+}
+
+/* toast notification */
+.mng-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(0.5rem);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: oklch(0.22 0.08 30);
+  color: oklch(0.78 0.14 30);
+  font-size: 0.8125rem;
+  border-radius: 0.375rem;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.mng-toast-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap");
+
 #bmr-dialog::backdrop {
   background: oklch(0 0 0 / 0.55);
 }
@@ -15,14 +17,17 @@
   inset: 0;
   margin: auto;
   padding: 0;
-  width: min(90vw, 36.25rem);
-  max-height: min(80vh, 30rem);
+  width: 36.25rem;
+  max-width: 90vw;
+  height: 30rem;
+  max-height: 80vh;
   border: 0.0625rem solid var(--bmr-border);
   border-radius: var(--bmr-radius);
   background: var(--bmr-bg);
   color: var(--bmr-text);
   overflow: hidden;
   box-shadow: 0 0.75rem 2.5rem oklch(0 0 0 / 0.5);
+  font-family: "Fira Code", monospace;
 }
 
 #bmr-dialog[open] {
@@ -36,20 +41,73 @@
   height: 100%;
 }
 
+.bmr-input-row {
+  position: relative;
+  display: flex;
+  border-bottom: 0.0625rem solid var(--bmr-border);
+}
+
 .bmr-input {
-  width: 100%;
+  flex: 1;
   padding: 0.875rem 1rem;
   border: none;
-  border-bottom: 0.0625rem solid var(--bmr-border);
   background: transparent;
   color: var(--bmr-text);
   font-size: 1rem;
   outline: none;
   box-sizing: border-box;
+  font-family: "Fira Code", monospace;
 }
 
 .bmr-input::placeholder {
   color: var(--bmr-muted);
+}
+
+.bmr-manage-btn {
+  flex-shrink: 0;
+  width: 2.75rem;
+  border: none;
+  background: transparent;
+  color: var(--bmr-muted);
+  font-size: 1.125rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+
+.bmr-manage-btn:hover {
+  color: var(--bmr-accent);
+}
+
+/* error popover below the input */
+.bmr-error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: oklch(0.22 0.08 30);
+  color: oklch(0.78 0.14 30);
+  font-size: 0.8125rem;
+  opacity: 0;
+  transform: translateY(-0.25rem);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bmr-error-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bmr-error-icon {
+  flex-shrink: 0;
 }
 
 .bmr-results {
@@ -118,6 +176,41 @@
 .bmr-delete:hover {
   background: oklch(0.6 0.18 30 / 0.2);
   color: oklch(0.68 0.15 350);
+}
+
+.bmr-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  border-top: 0.0625rem solid var(--bmr-border);
+  font-size: 0.75rem;
+}
+
+.bmr-page-btn {
+  padding: 0.25rem 0.5rem;
+  border: 0.0625rem solid var(--bmr-border);
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--bmr-text);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.bmr-page-btn:hover:not(:disabled) {
+  background: var(--bmr-surface);
+}
+
+.bmr-page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.bmr-page-info {
+  color: var(--bmr-muted);
+  font-size: 0.75rem;
 }
 
 .bmr-footer {
