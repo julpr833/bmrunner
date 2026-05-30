@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "BM Runner",
+  "version": "1.0",
+  "description": "KDE Runner-style alias launcher",
+  "permissions": [
+    "storage",
+    "clipboardWrite",
+    "scripting"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "commands": {
+    "open-runner": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K",
+        "mac": "Command+Shift+K"
+      },
+      "description": "Open BM Runner dialog"
+    }
+  },
+  "action": {}
+}
