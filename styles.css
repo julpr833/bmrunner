@@ -69,7 +69,7 @@
   width: 2.75em;
   border: none;
   background: transparent;
-  color: var(--bmr-muted);
+  color: var(--bmr-accent);
   font-size: 1.125em;
   cursor: pointer;
   display: flex;
@@ -79,7 +79,7 @@
 }
 
 .bmr-manage-btn:hover {
-  color: var(--bmr-accent);
+  color: oklch(from var(--bmr-accent) l + 0.5 c h);
 }
 
 .bmr-error {
@@ -201,8 +201,11 @@
   justify-content: center;
   gap: 0.5em;
   padding: 0.375em 1em;
-  border-top: 0.0625em solid var(--bmr-border);
   font-size: 0.75em;
+}
+
+.bmr-pagination:not(:empty) {
+  border-top: 0.0625em solid var(--bmr-border);
 }
 
 .bmr-page-btn {
@@ -278,10 +281,6 @@
   color: var(--bmr-text);
   font-size: 0.8125em;
   outline: none;
-}
-
-.bmr-add-form input:focus {
-  border-color: var(--bmr-accent);
 }
 
 .bmr-add-actions {

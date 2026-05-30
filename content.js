@@ -194,7 +194,7 @@
         <div id="bmr-pagination" class="bmr-pagination"></div>
         <div id="bmr-footer" class="bmr-footer">
           <button id="bmr-add-btn" class="bmr-add-btn">+ Add Alias</button>
-          <span class="bmr-hint">Esc · ⚙ to manage</span>
+          <span class="bmr-hint">Press Esc to close · Click ⚙ to manage</span>
         </div>
       </div>`;
 
