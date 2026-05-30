@@ -1,30 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BM Runner — Manage Aliases</title>
-<link rel="stylesheet" href="manage.css">
-</head>
-<body>
-<div class="mng-container">
-  <h1 class="mng-title">Manage Aliases</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BM Runner — Manage Aliases</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/icon16.png" />
+    <link rel="icon" type="image/png" sizes="128x128" href="../images/icon128.png" />
+    <link rel="stylesheet" href="manage.css" />
+  </head>
+  <body>
+    <div class="mng-container">
+      <h1 class="mng-title">Manage Aliases</h1>
 
-  <div class="mng-add-form">
-    <input type="text" id="mng-name" placeholder="Alias name" />
-    <input type="text" id="mng-value" placeholder="Alias value" />
-    <button id="mng-add-btn">Add</button>
-  </div>
+      <div class="mng-add-form">
+        <input type="text" id="mng-name" placeholder="Alias name" />
+        <input type="text" id="mng-value" placeholder="Alias value" />
+        <button id="mng-add-btn">Add</button>
+      </div>
 
-  <table class="mng-table">
-    <thead>
-      <tr><th>Name</th><th>Value</th><th></th></tr>
-    </thead>
-    <tbody id="mng-tbody"></tbody>
-  </table>
+      <table class="mng-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="mng-tbody"></tbody>
+      </table>
 
-  <div id="mng-pagination" class="mng-pagination"></div>
-</div>
-<script src="manage.js"></script>
-</body>
+      <div id="mng-pagination" class="mng-pagination"></div>
+    </div>
+    <script src="manage.js"></script>
+  </body>
 </html>

@@ -3,11 +3,7 @@
   "name": "BM Runner",
   "version": "1.0",
   "description": "KDE Runner-style alias launcher",
-  "permissions": [
-    "storage",
-    "clipboardWrite",
-    "scripting"
-  ],
+  "permissions": ["storage", "clipboardWrite", "scripting"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "src/background.js"
@@ -28,5 +24,18 @@
       "description": "Open BM Runner dialog"
     }
   },
-  "action": {}
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "images/icon16.png",
+      "32": "images/icon32.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  }
 }
