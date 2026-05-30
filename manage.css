@@ -95,6 +95,14 @@ body {
   background: var(--surface);
 }
 
+.mng-favicon {
+  width: 1em;
+  height: 1em;
+  border-radius: 0.125em;
+  vertical-align: middle;
+  margin-right: 0.5em;
+}
+
 .mng-name-cell {
   font-weight: 600;
   color: var(--accent);

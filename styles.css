@@ -96,7 +96,9 @@
   font-size: 0.8125em;
   opacity: 0;
   transform: translateY(-0.25em);
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
   pointer-events: none;
   z-index: 1;
 }
@@ -123,6 +125,14 @@
   font-size: 0.875em;
 }
 
+.bmr-favicon {
+  width: 1em;
+  height: 1em;
+  border-radius: 0.125em;
+  flex-shrink: 1;
+  margin-right: 0.625em;
+}
+
 .bmr-result {
   display: flex;
   align-items: center;
@@ -138,6 +148,13 @@
 }
 
 .bmr-result-main {
+  display: flex;
+  align-items: center;
+  gap: 0.125em;
+  min-width: 0;
+}
+
+.bmr-result-main--text {
   display: flex;
   flex-direction: column;
   gap: 0.125em;

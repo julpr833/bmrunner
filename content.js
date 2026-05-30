@@ -66,9 +66,12 @@
       .map(
         (alias) => `
       <div class="bmr-result" data-name="${escapeHtml(alias.name)}">
-        <div class="bmr-result-main">
-          <span class="bmr-result-name">${escapeHtml(alias.name)}</span>
-          <span class="bmr-result-value">${escapeHtml(alias.value)}</span>
+      <div class="bmr-result-main">
+          <img class="bmr-favicon" src="${faviconUrl(alias.value)}" alt="" loading="lazy" />
+          <div class="bmr-result-main--text">
+            <span class="bmr-result-name">${escapeHtml(alias.name)}</span>
+            <span class="bmr-result-value">${escapeHtml(alias.value)}</span>
+          </div>
         </div>
         <button class="bmr-delete" data-name="${escapeHtml(alias.name)}" title="Delete alias">&times;</button>
       </div>`,
@@ -90,6 +93,21 @@
       <button class="bmr-page-btn" data-page="${state.page - 1}" ${state.page <= 1 ? "disabled" : ""}>◀ Prev</button>
       <span class="bmr-page-info">${state.page} / ${totalPages}</span>
       <button class="bmr-page-btn" data-page="${state.page + 1}" ${state.page >= totalPages ? "disabled" : ""}>Next ▶</button>`;
+  }
+
+  // I extract a favicon URL from an alias value
+  function faviconUrl(value) {
+    try {
+      const url = new URL(value);
+      return `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=16`;
+    } catch {
+      try {
+        const url = new URL(`https://${value}`);
+        return `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=16`;
+      } catch {
+        return "";
+      }
+    }
   }
 
   // I escape HTML entities so user values can't inject markup
@@ -115,7 +133,10 @@
       <span>${escapeHtml(msg)}</span>`;
     popover.classList.add("bmr-error-visible");
     clearTimeout(popover._timer);
-    popover._timer = setTimeout(() => popover.classList.remove("bmr-error-visible"), 3000);
+    popover._timer = setTimeout(
+      () => popover.classList.remove("bmr-error-visible"),
+      3000,
+    );
   }
 
   // I show/hide the inline form for adding a new alias

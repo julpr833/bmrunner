@@ -31,7 +31,7 @@ function render() {
     .map(
       (a, i) => `
     <tr>
-      <td class="mng-name-cell">${esc(a.name)}</td>
+      <td class="mng-name-cell"><img class="mng-favicon" src="${faviconUrl(a.value)}" alt="" loading="lazy" /> ${esc(a.name)}</td>
       <td class="mng-value-cell">${esc(a.value)}</td>
       <td class="mng-actions">
         <button class="mng-edit-btn" data-index="${start + i}">Edit</button>
@@ -69,6 +69,16 @@ function showToast(msg) {
   document.body.appendChild(toast);
   requestAnimationFrame(() => toast.classList.add("mng-toast-visible"));
   setTimeout(() => toast.classList.remove("mng-toast-visible"), 3000);
+}
+
+function faviconUrl(value) {
+  try {
+    return `https://www.google.com/s2/favicons?domain=${new URL(value).hostname}&sz=16`;
+  } catch {
+    try {
+      return `https://www.google.com/s2/favicons?domain=${new URL(`https://${value}`).hostname}&sz=16`;
+    } catch { return ""; }
+  }
 }
 
 function esc(str) {
