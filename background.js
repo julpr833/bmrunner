@@ -1,9 +1,12 @@
-// I handle open-url requests from the content script
+// I handle messages from the content script
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action === "open-url") {
     let url = msg.url;
     if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)) url = "https://" + url;
     chrome.tabs.create({ url });
+  }
+  if (msg.action === "open-manage") {
+    chrome.tabs.create({ url: chrome.runtime.getURL("manage.html") });
   }
 });
 
