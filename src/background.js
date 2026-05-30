@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener((msg) => {
     chrome.tabs.create({ url });
   }
   if (msg.action === "open-manage") {
-    chrome.tabs.create({ url: chrome.runtime.getURL("manage.html") });
+    chrome.tabs.create({ url: chrome.runtime.getURL("src/manage.html") });
   }
 });
 
@@ -18,11 +18,11 @@ async function ensureContentScript(tabId) {
   } catch {
     await chrome.scripting.executeScript({
       target: { tabId },
-      files: ["content.js"],
+      files: ["src/content.js"],
     });
     await chrome.scripting.insertCSS({
       target: { tabId },
-      files: ["styles.css"],
+      files: ["src/styles.css"],
     });
     return false;
   }
