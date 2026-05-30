@@ -2,6 +2,8 @@
   const state = {
     aliases: [],
     dialog: null,
+    page: 1,
+    perPage: 8,
   };
 
   // I ask the background worker to open a URL in a new tab
@@ -11,13 +13,19 @@
 
   // I fetch aliases from chrome.storage.sync
   async function loadAliases() {
-    const res = await chrome.storage.sync.get("aliases");
-    state.aliases = res.aliases || [];
+    try {
+      const res = await chrome.storage.sync.get("aliases");
+      state.aliases = res.aliases || [];
+    } catch (e) {
+      state.aliases = [];
+    }
   }
 
   // I persist aliases to chrome.storage.sync
   async function saveAliases() {
-    await chrome.storage.sync.set({ aliases: state.aliases });
+    try {
+      await chrome.storage.sync.set({ aliases: state.aliases });
+    } catch (e) {}
   }
 
   // I filter aliases by user query (name or value)
@@ -32,21 +40,29 @@
 
   // I rebuild the results list from the current query
   function renderResults(query) {
-    const container = document.getElementById("bmr-results");
+    const container = state.dialog.querySelector("#bmr-results");
     const filtered = filterAliases(query);
+    const totalPages = Math.ceil(filtered.length / state.perPage) || 1;
+
+    if (state.page > totalPages) state.page = totalPages;
+
+    const start = (state.page - 1) * state.perPage;
+    const pageItems = filtered.slice(start, start + state.perPage);
 
     if (state.aliases.length === 0) {
       container.innerHTML =
         '<div class="bmr-empty">No aliases yet. Click "+ Add Alias" to create one.</div>';
+      renderPagination(0);
       return;
     }
 
     if (filtered.length === 0) {
       container.innerHTML = '<div class="bmr-empty">No matching aliases</div>';
+      renderPagination(0);
       return;
     }
 
-    container.innerHTML = filtered
+    container.innerHTML = pageItems
       .map(
         (alias) => `
       <div class="bmr-result" data-name="${escapeHtml(alias.name)}">
@@ -58,6 +74,22 @@
       </div>`,
       )
       .join("");
+
+    renderPagination(filtered.length);
+  }
+
+  // I render pagination controls below the results
+  function renderPagination(total) {
+    const container = state.dialog.querySelector("#bmr-pagination");
+    const totalPages = Math.ceil(total / state.perPage);
+    if (totalPages <= 1) {
+      container.innerHTML = "";
+      return;
+    }
+    container.innerHTML = `
+      <button class="bmr-page-btn" data-page="${state.page - 1}" ${state.page <= 1 ? "disabled" : ""}>◀ Prev</button>
+      <span class="bmr-page-info">${state.page} / ${totalPages}</span>
+      <button class="bmr-page-btn" data-page="${state.page + 1}" ${state.page >= totalPages ? "disabled" : ""}>Next ▶</button>`;
   }
 
   // I escape HTML entities so user values can't inject markup
@@ -67,9 +99,29 @@
     return div.innerHTML;
   }
 
+  // I show an error popover below the input
+  function showError(msg) {
+    const inputRow = state.dialog.querySelector(".bmr-input-row");
+    if (!inputRow) return;
+    let popover = inputRow.querySelector("#bmr-error");
+    if (!popover) {
+      popover = document.createElement("div");
+      popover.id = "bmr-error";
+      popover.className = "bmr-error";
+      inputRow.appendChild(popover);
+    }
+    popover.innerHTML = `
+      <svg class="bmr-error-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg>
+      <span>${escapeHtml(msg)}</span>`;
+    popover.classList.add("bmr-error-visible");
+    clearTimeout(popover._timer);
+    popover._timer = setTimeout(() => popover.classList.remove("bmr-error-visible"), 3000);
+  }
+
   // I show/hide the inline form for adding a new alias
   function showAddForm() {
-    const existing = document.querySelector(".bmr-add-form");
+    const d = state.dialog;
+    const existing = d.querySelector(".bmr-add-form");
     if (existing) return existing.remove();
 
     const form = document.createElement("div");
@@ -83,7 +135,7 @@
       </div>
     `;
 
-    const footer = document.getElementById("bmr-footer");
+    const footer = d.querySelector("#bmr-footer");
     footer.parentNode.insertBefore(form, footer);
 
     form
@@ -94,13 +146,13 @@
       const value = form.querySelector(".bmr-add-value").value.trim();
       if (!name || !value) return;
       if (state.aliases.some((a) => a.name === name)) {
-        alert("An alias with this name already exists.");
+        showError("Alias already exists");
         return;
       }
       state.aliases.push({ name, value });
       saveAliases();
       form.remove();
-      renderResults(document.getElementById("bmr-input").value);
+      renderResults(d.querySelector("#bmr-input").value);
     });
 
     form.querySelector(".bmr-add-name").focus();
@@ -113,11 +165,15 @@
 
     dialog.innerHTML = `
       <div class="bmr-runner">
-        <input type="text" id="bmr-input" class="bmr-input" placeholder="Type to search aliases…" autofocus />
+        <div class="bmr-input-row">
+          <input type="text" id="bmr-input" class="bmr-input" placeholder="Type to search aliases…" autofocus />
+          <button id="bmr-manage-btn" class="bmr-manage-btn" title="Manage aliases">⚙</button>
+        </div>
         <div id="bmr-results" class="bmr-results"></div>
+        <div id="bmr-pagination" class="bmr-pagination"></div>
         <div id="bmr-footer" class="bmr-footer">
           <button id="bmr-add-btn" class="bmr-add-btn">+ Add Alias</button>
-          <span class="bmr-hint">Esc to close</span>
+          <span class="bmr-hint">Esc · ⚙ to manage</span>
         </div>
       </div>`;
 
@@ -125,10 +181,20 @@
 
     const input = dialog.querySelector("#bmr-input");
     const addBtn = dialog.querySelector("#bmr-add-btn");
+    const manageBtn = dialog.querySelector("#bmr-manage-btn");
     const results = dialog.querySelector("#bmr-results");
+    const pagination = dialog.querySelector("#bmr-pagination");
 
-    input.addEventListener("input", () => renderResults(input.value));
+    input.addEventListener("input", () => {
+      const popover = dialog.querySelector("#bmr-error");
+      if (popover) popover.classList.remove("bmr-error-visible");
+      state.page = 1;
+      renderResults(input.value);
+    });
     addBtn.addEventListener("click", showAddForm);
+    manageBtn.addEventListener("click", () => {
+      chrome.runtime.sendMessage({ action: "open-manage" });
+    });
 
     dialog.addEventListener("keydown", (e) => {
       if (e.key === "Escape") dialog.close();
@@ -167,6 +233,14 @@
       }
     });
 
+    // I handle pagination clicks via delegation
+    pagination.addEventListener("click", (e) => {
+      const btn = e.target.closest(".bmr-page-btn");
+      if (!btn || btn.disabled) return;
+      state.page = Number(btn.dataset.page);
+      renderResults(input.value);
+    });
+
     return dialog;
   }
 
@@ -183,6 +257,7 @@
     }
 
     await loadAliases();
+    state.page = 1;
     const input = state.dialog.querySelector("#bmr-input");
     input.value = "";
     renderResults("");
