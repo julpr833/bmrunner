@@ -32,7 +32,22 @@ The extension injects a searchable dialog into any page. Aliases are stored in `
 
 ## Download
 
-Grab the latest `.crx` from the [Releases](https://github.com/julpr833/bmrunner/releases) page, then drag it into `chrome://extensions` (enable **Developer mode** first).
+Grab the latest `.crx` from the Releases page, then drag it into `chrome://extensions` (enable **Developer mode** first).
+
+> Note: Some Brave versions display warnings or prevent enabling extensions installed from `.crx` files that are not distributed through the Chrome Web Store. If that happens, use the **Load unpacked** method instead.
+
+### Unpacked Installation
+
+Brave may block direct `.crx` installation even when **Developer mode** is enabled.
+
+1. Download the source code ZIP or clone the repository.
+2. Extract the project to a local folder.
+3. Open `brave://extensions`.
+4. Enable **Developer mode**.
+5. Click **Load unpacked**.
+6. Select the project folder containing `manifest.json`.
+
+The extension will be loaded locally and can be updated by pulling the latest changes from GitHub and reloading it from the extensions page.
 
 ## Usage
 
